@@ -9,3 +9,8 @@ Special thanks to:
     Kai Krueger aka apmon, osm2pgsql maintainer who added almost all features I needed;
     Jochen Topf, for openstreetmapdata.com source of coastlines;
     OSM community, who created the best world map.
+
+    
+Depends:
+    osm2pgsql 0.81.0+
+    

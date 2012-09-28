@@ -12,6 +12,8 @@ machine = [
     '--exclude-invalid-polygon',    # drop all invalid geometries on import
 ]
 
+
+
 # array that holds database-specific options
 instance = {
     'osm2pgsql.style':  'assets/osm2pgsql.style',           # default.style for this instance
@@ -19,9 +21,9 @@ instance = {
     'pg_table_prefix':  'planet_osm',                       # table prefix in db
     'pg_database':      'gis',                              # database name
     'pg_user':          'gis',                              # username
-    'planet'            '/home/gis/planet-120801.osm.pbf',  # planet file
+    'planet':           '/home/gis/planet-120801.osm.pbf',  # planet file
+    'log':              '/tmp/furry-sansa.log',             # log file url
 }
-
 
 osm2pgsql_options = machine[:]
 osm2pgsql_options.extend([
@@ -37,7 +39,10 @@ if instance['nodes.cache']:
     )
 
 osm2pgsql_actions = {
-    'create': ' '.join(osm2pgsql_options)
+    'create': ' '.join(osm2pgsql_options+ [
+        '--create',
+        instance['planet']
+        ])
     }
     
 #print ' '.join(osm2pgsql_options)
