@@ -55,14 +55,17 @@ if action == 'import':
 elif action == 'synthdump':
     logger.debug('starting dump synthesis')
     logger.info('downloading dumps')
+    local_filenames = ""
     os.chdir(instance['tmpdir'])
     for name, url in instance['external_dumps']:
-        execute('wget -c -O "%s" "%s"'%(name, url))
+        if 0 == execute('wget -c -O "%s" "%s"'%(name, url)): # downloading file finished well
+            if not os.path.exists(name+'.o5m'):
+                execute('osmconvert --out-05m "%s" > %s'%( name, instance['dump'] ))
+                local_filenames += ' "%s.o5m"'%name
 
     logger.info('merging final dump')
-    local_filenames = '"' + '" "'.join([i[0] for i in instance['external_dumps']]) + '"'
-    execute('osmconvert %s > %s'%( local_filenames, instance['dump'] ))
-    
+    execute('osmconvert --out-pbf %s > %s'%( local_filenames, instance['dump'] ))
+
 else:
     logger.error('unknown action %s'%action)
     exit(10)
