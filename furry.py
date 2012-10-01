@@ -60,7 +60,7 @@ elif action == 'synthdump':
     for name, url in instance['external_dumps']:
         if 0 == execute('wget -c -O "%s" "%s"'%(name, url)): # downloading file finished well
             if not os.path.exists(name+'.o5m'):
-                execute('osmconvert --out-05m "%s" > %s'%( name, instance['dump'] ))
+                execute('osmconvert --out-o5m "%s" > %s'%( name, name+'.o5m'))
                 local_filenames += ' "%s.o5m"'%name
 
     logger.info('merging final dump')
