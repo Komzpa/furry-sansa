@@ -35,7 +35,7 @@ instance = {
         ('austria.osm.pbf',             'http://download.geofabrik.de/openstreetmap/europe/austria.osm.pbf'),
         ('czech_republic.osm.pbf',      'http://download.geofabrik.de/openstreetmap/europe/czech_republic.osm.pbf'),
         ('serbia.osm.pbf',              'http://download.geofabrik.de/openstreetmap/europe/serbia.osm.pbf'),
-    ] 
+    ],
     
     'tmpdir':           '/tmp/furry-sansa/',                # where to put temporary files
     'log':              '/tmp/furry-sansa.log',             # log file path
