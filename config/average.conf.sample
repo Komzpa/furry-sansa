@@ -58,7 +58,7 @@ if 'nodes.cache' in instance:
 osm2pgsql_actions = {
     'create': ' '.join(osm2pgsql_options+ [
         '--create',
-        instance['planet']
+        instance['dump']
         ])
     }
     
