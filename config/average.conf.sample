@@ -22,6 +22,10 @@ instance = {
     'pg_database':      'gis',                              # database name
     'pg_user':          'gis',                              # username
     'index_template':   'assets/index.template.sql',        # indexing queries template
+    
+    'pg_timestamp':     '/home/gis/planet_osm_pg.timestamp', # timestamp of database import
+    'current_diff':     '/home/gis/changes.osc.gz',         # smaller diff that is applied to dbname
+    'cumulative_diff':  '/home/gis/cumulative.o5c.gz',      # larger diff, used to update dump
 
     'dump':             '/home/gis/synth.osm.pbf',          # planet file path
     'external_dumps':   [
@@ -61,7 +65,11 @@ osm2pgsql_actions = {
     'create': ' '.join(osm2pgsql_options+ [
         '--create',
         instance['dump']
-        ])
+        ]),
+    'append': ' '.join(osm2pgsql_options+ [
+        '--append',
+        instance['current_diff']
+        ]),
     }
 
 pg_database = "dbname=%s user=%s"%(instance['pg_database'], instance['pg_user'])
