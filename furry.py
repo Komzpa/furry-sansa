@@ -42,14 +42,17 @@ def execute(commandline):
     return process.returncode
 
 
-def sql(cursor, query):
+def sql(query):
     """
     A wrapper that measures query execution time.
     """
+    database_connection = psycopg2.connect(pg_database)
+    database_connection.set_isolation_level(0) # now we don't have to COMMIT everything
+    database_cursor = database_connection.cursor()
     time = datetime.datetime.now()
     logger.info('executing query [%s]'% query)
-    cursor.execute(query)
-    logger.info('[%s] completed in %s'%(query, str(datetime.datetime.now() - time)))
+    res = database_cursor.execute(query)
+    logger.info('[%s] completed in %s, result %s'%(query, str(datetime.datetime.now() - time), str(res)))
 
 action = sys.argv[2]
 
@@ -66,12 +69,10 @@ elif action == "index":
     logger.debug('preparing queries from %s' % instance['index_template'])
     queries = [line.split('-- ')[0].strip().replace('%prefix%', instance['pg_table_prefix']) for line in open(instance['index_template']) if line.split('-- ')[0].strip()]
     logger.debug('loaded %s queries, connecting to %s' % (len(queries), pg_database))
-    database_connection = psycopg2.connect(pg_database)
-    database_connection.set_isolation_level(0) # now we don't have to COMMIT everything
-    database_cursor = database_connection.cursor()
+
 
     for query in queries:
-        sql(database_cursor, query)
+        sql(query)
 
 
 elif action == 'synthdump':
