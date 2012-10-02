@@ -21,6 +21,8 @@ instance = {
     'pg_table_prefix':  'planet_osm',                       # table prefix in db
     'pg_database':      'gis',                              # database name
     'pg_user':          'gis',                              # username
+    'index_template':   'assets/index.template.sql',        # indexing queries template
+
     'dump':             '/home/gis/synth.osm.pbf',          # planet file path
     'external_dumps':   [
         ('gislab-local.osm.pbf',        'http://gis-lab.info/projects/osm_dump/dump/latest/local.osm.pbf'),
@@ -61,6 +63,8 @@ osm2pgsql_actions = {
         instance['dump']
         ])
     }
-    
+
+pg_database = "dbname=%s user=%s"%(instance['pg_database'], instance['pg_user'])
+
 #print ' '.join(osm2pgsql_options)
 #'--create',
