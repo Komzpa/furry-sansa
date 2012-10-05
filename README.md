@@ -14,3 +14,16 @@ Depends:
  * osm2pgsql 0.81.0+ https://github.com/openstreetmap/osm2pgsql
  * osm-c-tools http://gitorious.org/osm-c-tools
  * wget
+
+ 
+Workflow:
+ * Write a config file for your hardware and intentions;
+ * get OpenStreetMap dump. If you define a set of dumps in config file, it's as easy as:
+```bash
+python furry.py config/your_config.conf synthdump
+```
+ The process will automatically update merged dump with latest data using minutely, hourly and daily diffs.
+ * load data to postgres database. 
+```bash
+python furry.py config/your_config.conf import
+```
