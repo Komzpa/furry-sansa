@@ -10,11 +10,7 @@ Special thanks to:
  * Jochen Topf, for openstreetmapdata.com source of coastlines;
  * OSM community, who created the best world map.
 
-    
 Depends:
  * osm2pgsql 0.81.0+ https://github.com/openstreetmap/osm2pgsql
  * osm-c-tools http://gitorious.org/osm-c-tools
  * wget
- 
-    
-    
