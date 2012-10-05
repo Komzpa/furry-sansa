@@ -107,8 +107,8 @@ elif action == 'updatedump':
             os.remove(instance['dump'])
             os.rename(instance['dump']+".new", instance['dump'])
     else:
-        tmpfile = os.path.join(instance['tmpdir'], 'newdump.osm.pbf') )
-        if 0 == execute('osmupdate %s %s'%( instance['dump'], tmpfile):
+        tmpfile = os.path.join(instance['tmpdir'], 'newdump.osm.pbf')
+        if 0 == execute('osmupdate %s %s'%( instance['dump'], tmpfile)):
             os.remove(instance['dump'])
             os.rename(tmpfile, instance['dump'])
 
