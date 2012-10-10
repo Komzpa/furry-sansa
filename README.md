@@ -22,8 +22,31 @@ Workflow:
 ```bash
 python furry.py config/your_config.conf synthdump
 ```
+
  The process will automatically update merged dump with latest data using minutely, hourly and daily diffs.
+
+ * alternatively, if you downloaded dump yourself and want to update it,
+```bash
+python furry.py config/your_config.conf updatedump
+```
+
  * load data to postgres database. 
 ```bash
 python furry.py config/your_config.conf import
+```
+
+ * for minutely updates, you need to get new diffs from OpenStreetMap server
+``` bash
+python furry.py config/your_config.conf getdiff
+```
+
+ * to actually apply diff to database, 
+
+``` bash
+python furry.py config/your_config.conf diff2db
+```
+
+ * to update your dump afterwards using the same downloaded diffs, once you have some diffs downloaded:
+``` bash
+python furry.py config/your_config.conf updatedump
 ```
