@@ -120,20 +120,20 @@ elif action == 'getdiff':
         logger.error('can not read timestamp file %s, please fill it!'%instance['pg_timestamp'])
         exit(1)
     if os.path.exists(instance['current_diff']):
-        timestamp_diff = execute('osmconvert --out-timestamp "%s"'%instance['current_diff'] , need_output = True)
+        timestamp_diff = execute('osmconvert --out-timestamp "%s"'%instance['current_diff'] , need_output = True).strip()
         if timestamp_diff == timestamp:
             os.remove(instance['current_diff'])
     if not os.path.exists(instance['current_diff']):
         logger.debug('getting new diffs')
-        execute('osmupdate %s %s'%(timestamp, instance['current_diff']))
+        execute('osmupdate --fake-lonlat %s %s'%(timestamp, instance['current_diff']))
         timestamp_diff = execute('osmconvert --out-timestamp "%s"'%instance['current_diff'] , need_output = True)
         logger.debug('got new diffs, old timestamp %s, new %s'%(timestamp, timestamp_diff))
     #updating cumulative diff
     if os.path.exists(instance['current_diff']):
         if not os.path.exists(instance['cumulative_diff']):
-            execute("osmconvert --out-o5c %s > %s"%(instance['current_diff'], instance['cumulative_diff']))
+            execute("osmconvert --out-o5c %s | gzip > %s"%(instance['current_diff'], instance['cumulative_diff']))
         else:
-            if 0 == execute("osmconvert --merge-versions --out-o5c %s %s > %s.new" % (instance['cumulative_diff'], instance['current_diff'], instance['cumulative_diff'])):
+            if 0 == execute("osmconvert --merge-versions --out-o5c %s %s | gzip > %s.new" % (instance['cumulative_diff'], instance['current_diff'], instance['cumulative_diff'])):
                 os.remove(instance['cumulative_diff'])
                 os.rename(instance['cumulative_diff']+".new", instance['cumulative_diff'])
 
