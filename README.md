@@ -41,7 +41,6 @@ python furry.py config/your_config.conf getdiff
 ```
 
  * to actually apply diff to database, 
-
 ``` bash
 python furry.py config/your_config.conf diff2db
 ```
