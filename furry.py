@@ -103,11 +103,11 @@ elif action == 'synthdump':
 elif action == 'updatedump':
     logger.info('updating dump')
     if os.path.exists(instance['cumulative_diff']):
-        if 0 == execute("osmconvert --out-pbf %s %s > %s.new"%(instance['dump'], instance['cumulative_diff'], instance['dump'])):
+        if 0 == execute("osmconvert --out-o5m %s %s > %s.new"%(instance['dump'], instance['cumulative_diff'], instance['dump'])):
             os.remove(instance['dump'])
             os.rename(instance['dump']+".new", instance['dump'])
     else:
-        tmpfile = os.path.join(instance['tmpdir'], 'newdump.osm.pbf')
+        tmpfile = os.path.join(instance['tmpdir'], 'newdump.o5m')
         if 0 == execute('osmupdate %s %s'%( instance['dump'], tmpfile)):
             os.remove(instance['dump'])
             os.rename(tmpfile, instance['dump'])
@@ -126,7 +126,7 @@ elif action == 'getdiff':
     if not os.path.exists(instance['current_diff']):
         logger.debug('getting new diffs')
         execute('osmupdate --fake-lonlat %s %s'%(timestamp, instance['current_diff']))
-        timestamp_diff = execute('osmconvert --out-timestamp "%s"'%instance['current_diff'] , need_output = True)
+        timestamp_diff = execute('osmconvert --out-timestamp "%s"'%instance['current_diff'] , need_output = True).strip()
         logger.debug('got new diffs, old timestamp %s, new %s'%(timestamp, timestamp_diff))
     #updating cumulative diff
     if os.path.exists(instance['current_diff']):
