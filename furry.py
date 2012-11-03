@@ -68,6 +68,7 @@ if not os.path.exists(instance['tmpdir']):
 if action == 'import':
     logger.debug('starting osm2pgsql import')
     if 0 == execute('osm2pgsql ' +osm2pgsql_actions['create']):
+        os.remove(instance['pg_timestamp'])
         execute("osmconvert --out-timestamp %s > %s "%(instance['dump'],instance['pg_timestamp']))
         if "(" in open(instance['pg_timestamp']).read():
             # recalculating timestamp
@@ -131,9 +132,9 @@ elif action == 'getdiff':
     #updating cumulative diff
     if os.path.exists(instance['current_diff']):
         if not os.path.exists(instance['cumulative_diff']):
-            execute("osmconvert --out-o5c %s | gzip > %s"%(instance['current_diff'], instance['cumulative_diff']))
+            execute("osmconvert --out-o5c %s > %s"%(instance['current_diff'], instance['cumulative_diff']))
         else:
-            if 0 == execute("osmconvert --merge-versions --out-o5c %s %s | gzip > %s.new" % (instance['cumulative_diff'], instance['current_diff'], instance['cumulative_diff'])):
+            if 0 == execute("osmconvert --merge-versions --out-o5c %s %s > %s.new" % (instance['cumulative_diff'], instance['current_diff'], instance['cumulative_diff'])):
                 os.remove(instance['cumulative_diff'])
                 os.rename(instance['cumulative_diff']+".new", instance['cumulative_diff'])
 
