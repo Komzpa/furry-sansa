@@ -4,6 +4,7 @@ import logging
 import datetime
 import subprocess
 import psycopg2
+import shutil
 
 
 if len(sys.argv) < 3:
@@ -111,7 +112,7 @@ elif action == 'updatedump':
         tmpfile = os.path.join(instance['tmpdir'], 'newdump.o5m')
         if 0 == execute('osmupdate %s %s'%( instance['dump'], tmpfile)):
             os.remove(instance['dump'])
-            os.rename(tmpfile, instance['dump'])
+            shutil.move(tmpfile, instance['dump'])
 
 elif action == 'getdiff':
     logger.debug('getting diffs')
