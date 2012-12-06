@@ -36,6 +36,11 @@ python furry.py config/your_config.conf updatedump
 python furry.py config/your_config.conf import
 ```
 
+ * create all indexes you need for postgres db to work properly. 
+```bash
+python furry.py config/your_config.conf index
+```
+
  * for minutely updates, you need to get new diffs from OpenStreetMap server
 ``` bash
 python furry.py config/your_config.conf getdiff
