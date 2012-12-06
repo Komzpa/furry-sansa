@@ -14,6 +14,7 @@ Depends:
  * osm2pgsql 0.81.0+ https://github.com/openstreetmap/osm2pgsql
  * osm-c-tools http://gitorious.org/osm-c-tools
  * wget
+ * python-psycopg2
 
  
 Workflow:
