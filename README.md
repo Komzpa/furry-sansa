@@ -14,6 +14,7 @@ Depends:
  * osm2pgsql 0.81.0+ https://github.com/openstreetmap/osm2pgsql
  * osm-c-tools http://gitorious.org/osm-c-tools
  * wget
+ * python-psycopg2
 
  
 Workflow:
@@ -33,6 +34,11 @@ python furry.py config/your_config.conf updatedump
  * load data to postgres database. 
 ```bash
 python furry.py config/your_config.conf import
+```
+
+ * create all indexes you need for postgres db to work properly. 
+```bash
+python furry.py config/your_config.conf index
 ```
 
  * for minutely updates, you need to get new diffs from OpenStreetMap server
