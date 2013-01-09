@@ -90,17 +90,24 @@ elif action == 'synthdump':
     logger.info('downloading dumps')
     local_filenames = ""
     os.chdir(instance['tmpdir'])
-    for name, url in instance['external_dumps']:
+    if len(instance['external_dumps']) > 1:
+        for name, url in instance['external_dumps']:
+            if 0 == execute('wget -c -O "%s" "%s"'%(name, url)): # downloading file finished well
+                if not os.path.exists(name+'.o5m'):
+                    execute('osmconvert --out-o5m "%s" |gzip > "%s"'%( name, name+'.o5m.gz'))
+                    local_filenames += ' "%s.o5m.gz"'%name
+    
+
+        logger.info('merging final dump')
+        execute('osmconvert --out-o5m %s | gzip > %s'%( local_filenames, 'merged.o5m.gz' ))
+        logger.info('updating dump')
+        execute('osmupdate %s %s'%( 'merged.o5m.gz', instance['dump'] ))
+    else:
+        name, url = instance['external_dumps'][0]
         if 0 == execute('wget -c -O "%s" "%s"'%(name, url)): # downloading file finished well
-            if not os.path.exists(name+'.o5m'):
-                execute('osmconvert --out-o5m "%s" |gzip > "%s"'%( name, name+'.o5m.gz'))
-                local_filenames += ' "%s.o5m.gz"'%name
+            logger.info('updating dump')
+            execute('osmupdate %s %s'%( 'name', instance['dump'] ))
 
-    logger.info('merging final dump')
-    execute('osmconvert --out-o5m %s | gzip > %s'%( local_filenames, 'merged.o5m.gz' ))
-
-    logger.info('updating dump')
-    execute('osmupdate %s %s'%( 'merged.o5m.gz', instance['dump'] ))
 
 elif action == 'updatedump':
     logger.info('updating dump')
