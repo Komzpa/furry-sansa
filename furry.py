@@ -106,7 +106,7 @@ elif action == 'synthdump':
         name, url = instance['external_dumps'][0]
         if 0 == execute('wget -c -O "%s" "%s"'%(name, url)): # downloading file finished well
             logger.info('updating dump')
-            execute('osmupdate %s %s'%( 'name', instance['dump'] ))
+            execute('osmupdate %s %s'%(name, instance['dump'] ))
 
 
 elif action == 'updatedump':
