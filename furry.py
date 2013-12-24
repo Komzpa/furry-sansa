@@ -71,7 +71,8 @@ if not os.path.exists(instance['tmpdir']):
 if action == 'import':
     logger.debug('starting osm2pgsql import')
     if 0 == execute('osm2pgsql ' +osm2pgsql_actions['create']):
-        os.remove(instance['pg_timestamp'])
+        if os.path.exists(instance['pg_timestamp']):
+            os.remove(instance['pg_timestamp'])
         execute("osmconvert --out-timestamp %s > %s "%(instance['dump'],instance['pg_timestamp']))
         if "(" in open(instance['pg_timestamp']).read():
             # recalculating timestamp
