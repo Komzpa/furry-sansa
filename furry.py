@@ -93,6 +93,10 @@ elif action == 'synthdump':
     logger.info('downloading dumps')
     local_filenames = ""
     os.chdir(instance['tmpdir'])
+    if 'poly' in instance:
+        filter_poly = '-B='+instance['poly']
+    else:
+        filter_poly = ''
     if len(instance['external_dumps']) > 1:
         for name, url in instance['external_dumps']:
             if 0 == execute('wget -c -O "%s" "%s"'%(name, url)): # downloading file finished well
@@ -104,18 +108,22 @@ elif action == 'synthdump':
         logger.info('merging final dump')
         execute('osmconvert --out-o5m %s | gzip > %s'%( local_filenames, 'merged.o5m.gz' ))
         logger.info('updating dump')
-        execute('osmupdate %s %s'%( 'merged.o5m.gz', instance['dump'] ))
+        execute('osmupdate %s %s %s'%( 'merged.o5m.gz', filter_poly, instance['dump'] ))
     else:
         name, url = instance['external_dumps'][0]
         if 0 == execute('wget -c -O "%s" "%s"'%(name, url)): # downloading file finished well
             logger.info('updating dump')
-            execute('osmupdate %s %s'%(name, instance['dump'] ))
+            execute('osmupdate %s %s %s'%(name, filter_poly, instance['dump'] ))
 
 
 elif action == 'updatedump':
     logger.info('updating dump')
+    if 'poly' in instance:
+        filter_poly = '-B='+instance['poly']
+    else:
+        filter_poly = ''
     if os.path.exists(instance['cumulative_diff']):
-        if 0 == execute("osmconvert --out-o5m %s %s > %s.new"%(instance['dump'], instance['cumulative_diff'], instance['dump'])):
+        if 0 == execute("osmconvert --out-o5m %s %s %s > %s.new"%(instance['dump'], filter_poly, instance['cumulative_diff'], instance['dump'])):
             os.remove(instance['dump'])
             os.rename(instance['dump']+".new", instance['dump'])
     else:
