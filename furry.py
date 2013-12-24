@@ -1,3 +1,5 @@
+#!/usr/bin/env python2
+
 import os
 import sys
 import logging
@@ -69,7 +71,8 @@ if not os.path.exists(instance['tmpdir']):
 if action == 'import':
     logger.debug('starting osm2pgsql import')
     if 0 == execute('osm2pgsql ' +osm2pgsql_actions['create']):
-        os.remove(instance['pg_timestamp'])
+        if os.path.exists(instance['pg_timestamp']):
+            os.remove(instance['pg_timestamp'])
         execute("osmconvert --out-timestamp %s > %s "%(instance['dump'],instance['pg_timestamp']))
         if "(" in open(instance['pg_timestamp']).read():
             # recalculating timestamp
@@ -90,6 +93,10 @@ elif action == 'synthdump':
     logger.info('downloading dumps')
     local_filenames = ""
     os.chdir(instance['tmpdir'])
+    if 'poly' in instance:
+        filter_poly = '-B='+instance['poly']
+    else:
+        filter_poly = ''
     if len(instance['external_dumps']) > 1:
         for name, url in instance['external_dumps']:
             if 0 == execute('wget -c -O "%s" "%s"'%(name, url)): # downloading file finished well
@@ -101,23 +108,27 @@ elif action == 'synthdump':
         logger.info('merging final dump')
         execute('osmconvert --out-o5m %s | gzip > %s'%( local_filenames, 'merged.o5m.gz' ))
         logger.info('updating dump')
-        execute('osmupdate %s %s'%( 'merged.o5m.gz', instance['dump'] ))
+        execute('osmupdate %s %s %s'%( 'merged.o5m.gz', filter_poly, instance['dump'] ))
     else:
         name, url = instance['external_dumps'][0]
         if 0 == execute('wget -c -O "%s" "%s"'%(name, url)): # downloading file finished well
             logger.info('updating dump')
-            execute('osmupdate %s %s'%(name, instance['dump'] ))
+            execute('osmupdate %s %s %s'%(name, filter_poly, instance['dump'] ))
 
 
 elif action == 'updatedump':
     logger.info('updating dump')
+    if 'poly' in instance:
+        filter_poly = '-B='+instance['poly']
+    else:
+        filter_poly = ''
     if os.path.exists(instance['cumulative_diff']):
-        if 0 == execute("osmconvert --out-o5m %s %s > %s.new"%(instance['dump'], instance['cumulative_diff'], instance['dump'])):
+        if 0 == execute("osmconvert --out-o5m %s %s %s > %s.new"%(instance['dump'], filter_poly, instance['cumulative_diff'], instance['dump'])):
             os.remove(instance['dump'])
             os.rename(instance['dump']+".new", instance['dump'])
     else:
-        tmpfile = os.path.join(instance['tmpdir'], 'newdump.o5m')
-        if 0 == execute('osmupdate %s %s'%( instance['dump'], tmpfile)):
+        tmpfile = os.path.join(instance['tmpdir'], 'temp'+os.path.basename(instance['dump']))
+        if 0 == execute('osmupdate %s %s %s'%( instance['dump'], filter_poly, tmpfile)):
             os.remove(instance['dump'])
             shutil.move(tmpfile, instance['dump'])
 
