@@ -99,6 +99,7 @@ node,way    addr:city           text        polygon
 node,way    addr:state          text        polygon
 node,way    addr:region         text        polygon
 node,way    addr:county         text        polygon
+node,way    addr:country        text        polygon
 node,way    addr:place          text        polygon
 node,way    addr:suburb         text        polygon
 node,way    addr:provisionalnumber  text        polygon
@@ -110,11 +111,9 @@ node,way    addr:housenumber2   text        polygon
 node,way    addr:street2        text        polygon
 node,way    addr:province       text        polygon
 node,way    admin_level         text        polygon
-#node,way    area                text        # hard coded support for area=1/yes => polygon is in osm2pgsql
 node,way    boundary            text        polygon
 node,way    capital             text        polygon
 node,way    name                text        polygon
-#node,way    natural             text        polygon  # natural=coastline tags are discarded by a hard coded rule in osm2pgsql
 node,way    operator            text        polygon
 node,way    place               text        polygon
 node,way    ref                 text        polygon
