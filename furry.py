@@ -131,15 +131,10 @@ elif action == 'updatedump':
         filter_poly = '--complex-ways -B='+instance['poly']
     else:
         filter_poly = ''
-    if os.path.exists(instance['cumulative_diff']):
-        if 0 == execute("osmconvert --out-o5m %s %s %s > %s.new"%(instance['dump'], filter_poly, instance['cumulative_diff'], instance['dump'])):
-            os.remove(instance['dump'])
-            os.rename(instance['dump']+".new", instance['dump'])
-    else:
-        tmpfile = os.path.join(instance['tmpdir'], 'temp'+os.path.basename(instance['dump']))
-        if 0 == execute('osmupdate %s %s %s'%( instance['dump'], filter_poly, tmpfile)):
-            os.remove(instance['dump'])
-            shutil.move(tmpfile, instance['dump'])
+    tmpfile = os.path.join(instance['tmpdir'], 'temp'+os.path.basename(instance['dump']))
+    if 0 == execute('osmupdate %s %s %s'%( instance['dump'], filter_poly, tmpfile)):
+        os.remove(instance['dump'])
+        shutil.move(tmpfile, instance['dump'])
 
 elif action == 'getdiff':
     logger.debug('getting diffs')
@@ -157,20 +152,11 @@ elif action == 'getdiff':
         execute('osmupdate --fake-lonlat %s %s'%(timestamp, instance['current_diff']))
         timestamp_diff = execute('osmconvert --out-timestamp "%s"'%instance['current_diff'] , need_output = True).strip()
         logger.debug('got new diffs, old timestamp %s, new %s'%(timestamp, timestamp_diff))
-    #updating cumulative diff
-    if os.path.exists(instance['current_diff']):
-        if not os.path.exists(instance['cumulative_diff']):
-            execute("osmconvert --out-o5c %s > %s"%(instance['current_diff'], instance['cumulative_diff']))
-        else:
-            if 0 == execute("osmconvert --merge-versions --out-o5c %s %s > %s.new" % (instance['cumulative_diff'], instance['current_diff'], instance['cumulative_diff'])):
-                os.remove(instance['cumulative_diff'])
-                os.rename(instance['cumulative_diff']+".new", instance['cumulative_diff'])
 
 elif action == 'diff2db':
     logger.debug('applying diffs to db')
     if 0 == execute('osm2pgsql ' +osm2pgsql_actions['append']):
         execute("osmconvert --out-timestamp %s > %s "%(instance['current_diff'],instance['pg_timestamp']))
-        
 
 else:
     logger.error('unknown action %s'%action)
