@@ -121,6 +121,9 @@ node,way    addr:housenumber    text        linear
 node,way    addr:interpolation  text        linear
 node,way    addr:housename      text        polygon
 
+node,way    wetland             text        polygon
+node,way    station             text        polygon
+
 
 node,way    addr:street         text        linear
 node,way    addr:postcode       text        linear
@@ -156,7 +159,6 @@ node,way    name                text        linear
 node,way    natural             text        polygon  # natural=coastline tags are discarded by a hard coded rule in osm2pgsql
 node,way    oneway              text        linear
 node,way    operator            text        linear
-node        poi                 text
 node,way    power               text        polygon
 node,way    power_source        text        linear
 node,way    place               text        polygon
@@ -218,6 +220,7 @@ node,way    traffic_sign        text        linear
 node,way    smoothness          text        linear
 node,way    phone               text        linear
 
+
 node,way    population          text        linear
 node,way    office              text        linear
 node,way    opening_hours       text        linear
@@ -244,5 +247,3 @@ way         way_area            real               # This is calculated during i
 #node,way    osm_timestamp       text
 node,way    osm_version         text        delete
 node,way    osm_changeset       text        delete
-
-
